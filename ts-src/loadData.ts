@@ -32,8 +32,8 @@ const shuffle = (array: any[]): any[] => {
 };
 
 const parseGames = async (): Promise<any[]> => new Promise((resolve) => {
-  fs.readFile(join(__dirname, '../data/steam_games.csv')).then((baseMovies) => {
-    parse(baseMovies, (err, data) => {
+  fs.readFile(join(__dirname, '../data/steam_games.csv')).then((baseGames) => {
+    parse(baseGames, (err, data) => {
       resolve(data);
     });
   });
@@ -61,9 +61,9 @@ const documentDAO = new DocumentDAO();
 
   // Write games in mongo
   console.log('Parsing CSV and writing games to mongo');
-  const parseMoviesBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  const parseGamesBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
   const parsedGames = await parseGames();
-  parseMoviesBar.start(parsedGames.length, 0);
+  parseGamesBar.start(parsedGames.length, 0);
 
   // TODO remove duplicate publishers
 
@@ -74,9 +74,9 @@ const documentDAO = new DocumentDAO();
     await documentDAO.insertGame({
       url, name, description, release_date, publishers
     });
-    parseMoviesBar.increment();
+    parseGamesBar.increment();
   }));
-  parseMoviesBar.stop();
+  parseGamesBar.stop();
 
   // Load them back to get their id along
   console.log('Loading games back in memory');

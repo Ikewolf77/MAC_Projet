@@ -128,8 +128,17 @@ bot.command('all', (ctx) => {
   } else {
     (async () => {
       const games = await documentDAO.getAllGames();
-      await ctx.reply(`There is : ${games.length} games.`);
-
+      let text = '';
+      text += `There is : ${games.length} games.\n\t`;
+      let i = 1;
+      for (const game of games) {
+        text += `${i}. ${game.name}\n\t`
+        if(++i == 10) {
+          break;
+        }
+      }
+      console.log(games);
+      await ctx.reply(text);
     })();
   }
 });

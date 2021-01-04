@@ -25,8 +25,8 @@ class DocumentDAO {
     await this.client.close();
   }
 
-  async insertGame(movie: Partial<Game>) {
-    await this.collection.insertOne(movie);
+  async insertGame(game: Partial<Game>) {
+    await this.collection.insertOne(game);
   }
 
   async getGames(search: string): Promise<Movie[]> {

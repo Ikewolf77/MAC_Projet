@@ -12,11 +12,11 @@ import {
 } from './Model';
 
 class GraphDAO {
-  
+
   private driver: Driver;
 
   constructor() {
-    this.driver = neo4j.driver(`bolt://${process.env.GRAPHDB_HOST}`, neo4j.auth.basic('neo4j', process.env.GRAPHDB_PASSWORD));
+    this.driver = neo4j.driver(`bolt://${process.env.GRAPHDB_HOST}`);
   }
 
   async prepare() {

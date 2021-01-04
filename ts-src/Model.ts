@@ -14,6 +14,19 @@ export type Movie = {
   metascore: number;
 }
 
+export type Game = {
+  _id: string;
+  url: string;
+  name: string;
+  description: string;
+  release_date: string;
+  publishers: string;
+}
+
+export type Tag = {
+  id: number;
+  name: string;
+}
 
 export type Actor = {
   id: number;

@@ -35,7 +35,7 @@ function buildLikeKeyboard(movieId: string, currentLike?: Liked): InlineKeyboard
 bot.on('inline_query', async (ctx) => {
   const query = ctx.inlineQuery;
   if (query) {
-    const movies = await documentDAO.getMovies(query.query);
+    const movies = await documentDAO.getGames(query.query);
     const answer: InlineQueryResultArticle[] = movies.map((movie) => ({
       id: movie._id,
       type: 'article',
@@ -119,6 +119,18 @@ bot.command('recommendactor', (ctx) => {
         ctx.reply(`Based your like and dislike we recommend the following actor(s):\n\t${actorsList}`);
       }
     });
+  }
+});
+
+bot.command('all', (ctx) => {
+  if (!ctx.from || !ctx.from.id) {
+    ctx.reply('We cannot guess who you are');
+  } else {
+    (async () => {
+      const games = await documentDAO.getAllGames();
+      await ctx.reply(`There is : ${games.length} games.`);
+
+    })();
   }
 });
 

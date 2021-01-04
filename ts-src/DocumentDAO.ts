@@ -1,5 +1,5 @@
 import { Collection, Db, MongoClient } from "mongodb";
-import { Movie } from "./Model";
+import {Game, Movie} from "./Model";
 
 class DocumentDAO {
 
@@ -25,11 +25,11 @@ class DocumentDAO {
     await this.client.close();
   }
 
-  async insertMovie(movie: Partial<Movie>) {
+  async insertGame(movie: Partial<Game>) {
     await this.collection.insertOne(movie);
   }
 
-  async getMovies(search: string): Promise<Movie[]> {
+  async getGames(search: string): Promise<Movie[]> {
     return await this.collection.find({ 'title': new RegExp(search) }).limit(10).toArray();
   }
 
@@ -41,7 +41,7 @@ class DocumentDAO {
     return await this.collection.find().limit(n).toArray();
   }
 
-  async getAllMovies(): Promise<Movie[]> {
+  async getAllGames(): Promise<Game[]> {
     return (await this.collection.find().toArray()).map((it) => ({
       ...it,
       _id: it._id.toString()

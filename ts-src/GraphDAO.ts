@@ -59,14 +59,14 @@ class GraphDAO {
     });
   }
 
-  async getMovieRated(userId: number, movieId: string): Promise<Rated | null> {
-    return await this.run('MATCH (:User{id: $userId})-[l:LIKED]-(:Movie{id: $movieId}) RETURN l', {
+  async getMovieRated(userId: number, gameId: string): Promise<Rated | null> {
+    return await this.run('MATCH (:User{id: $userId})-[r:RATED]-(:Game{id: $gameId}) RETURN r', {
       userId,
-      movieId,
+      gameId,
     }).then((res) => {
       if (res.records.length === 0) return null;
       else {
-        const record = res.records[0].get('l');
+        const record = res.records[0].get('r');
         return {
           rank: record.properties.rank,
           at: record.properties.at,

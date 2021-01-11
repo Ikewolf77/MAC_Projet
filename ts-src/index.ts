@@ -71,12 +71,12 @@ bot.on('callback_query', async (ctx) => {
   if (ctx.callbackQuery && ctx.from) {
     const [rank, gameId] = ctx.callbackQuery.data.split('__');
     console.log(rank, gameId);
-    // console.log("sososd");
+    
     const rated: Rated = {
       rank: parseInt(rank, 10),
       at: new Date()
     };
-    console.log(ctx.from);
+
     await graphDAO.upsertGameRated({
       first_name: 'unknown',
       last_name: 'unknown',

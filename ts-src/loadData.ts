@@ -69,10 +69,16 @@ const documentDAO = new DocumentDAO();
 
   await Promise.all(parsedGames.map(async (it: any) => {
     const [
-      url, name, description, release_date, publishers
+      url,types,name,desc_snippet,recent_reviews,all_reviews,
+      release_date,developer,publisher,popular_tags,game_details,
+      languages,achievements,genre,game_description,mature_content,
+      minimum_requirements,recommended_requirements,original_price,discount_price
     ] = it;
     await documentDAO.insertGame({
-      url, name, description, release_date, publishers
+      url,types,name,desc_snippet,recent_reviews,all_reviews,
+      release_date,developer,publisher,popular_tags,game_details,
+      languages,achievements,genre,game_description,mature_content,
+      minimum_requirements,recommended_requirements,original_price,discount_price
     });
     parseGamesBar.increment();
   }));
@@ -83,7 +89,7 @@ const documentDAO = new DocumentDAO();
   const games = await documentDAO.getAllGames();
 
   // Retrieve all genres and actors from all movies, split them and assign a numeric id
-  console.log('Calculating genres and actors');
+  // console.log('Calculating genres and actors');
   // const genres = [...new Set(games.flatMap((it) => it.genre.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
   // const actors = [...new Set(games.flatMap((it) => it.actors.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
 
@@ -94,7 +100,7 @@ const documentDAO = new DocumentDAO();
     // const movieGenres = game.genre.split(',').map(i => i.trim());
     // const gamePublishers = game.publishers.split(',').map(i => i.trim());
 
-    await graphDAO.upsertMovie(game._id, game.name);
+    //await graphDAO.upsertMovie(game._id, game.name);
 
     // Update actor <-> movie links
     // await Promise.all(movieActors.map((name) => {

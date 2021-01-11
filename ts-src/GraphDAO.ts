@@ -27,9 +27,9 @@ class GraphDAO {
     await this.driver.close();
   }
 
-  async upsertMovieRated(user: User, movieId: string, rated: Rated) {
+  async upsertGameRated(user: User, gameId: string, rated: Rated) {
     await this.run(`
-      MATCH (m:Movie {id: $movieId})
+      MATCH (g:Game {id: $gameId})
         MERGE (u:User {id: $userId})
           ON CREATE SET u.isBot = $isBot,
                         u.firstName = $firstName,
@@ -41,21 +41,21 @@ class GraphDAO {
                         u.lastName = $lastName,
                         u.username = $username,
                         u.languageCode = $languageCode
-        MERGE (u)-[l:LIKED]->(m)
-          ON CREATE SET l.rank = $likedRank,
-                        l.at = $likedAt
-          ON MATCH SET  l.rank = $likedRank,
-                        l.at = $likedAt
+        MERGE (u)-[r:RATED]->(g)
+          ON CREATE SET r.rank = $ratedRank,
+                        r.at = $ratedAt
+          ON MATCH SET  r.rank = $ratedRank,
+                        r.at = $ratedAt
     `, {
-      movieId,
+      gameId,
       isBot: user.is_bot,
       firstName: user.first_name,
       lastName: user.last_name,
       languageCode: user.language_code,
       username: user.username,
       userId: this.toInt(user.id),
-      likedRank: rated.rank,
-      likedAt: this.toDate(rated.at),
+      ratedRank: rated.rank,
+      ratedAt: this.toDate(rated.at),
     });
   }
 
@@ -87,7 +87,7 @@ class GraphDAO {
       MATCH (g:Game{ id: $gameId })
       MERGE (p:Tag{id: $tagId})
         ON CREATE SET p.name = $tagName
-      MERGE (p)-[r:PUBLISHED]->(g)
+      MERGE (p)-[r:TAGGED]->(g)
     `, {
       gameId,
       tagId: tag.id,

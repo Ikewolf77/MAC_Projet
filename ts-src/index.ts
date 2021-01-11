@@ -69,21 +69,23 @@ bot.on('chosen_inline_result', async (ctx) => {
 // Callback called when we click on the "reply_markup" (rated starts reply) from the game
 bot.on('callback_query', async (ctx) => {
   if (ctx.callbackQuery && ctx.from) {
-    const [rank, movieId] = ctx.callbackQuery.data.split('__');
-    console.log(rank, movieId);
+    const [rank, gameId] = ctx.callbackQuery.data.split('__');
+    console.log(rank, gameId);
+    // console.log("sososd");
     const rated: Rated = {
       rank: parseInt(rank, 10),
       at: new Date()
     };
-    await graphDAO.upsertMovieRated({
+    console.log(ctx.from);
+    await graphDAO.upsertGameRated({
       first_name: 'unknown',
       last_name: 'unknown',
       language_code: 'fr',
       is_bot: false,
       username: 'unknown',
       ...ctx.from,
-    }, movieId, rated);
-    ctx.editMessageReplyMarkup(buildRateKeyboard(movieId, rated));
+    }, gameId, rated);
+    ctx.editMessageReplyMarkup(buildRateKeyboard(gameId, rated));
   }
 });
 

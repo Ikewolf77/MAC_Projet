@@ -91,29 +91,22 @@ const documentDAO = new DocumentDAO();
   // Retrieve all genres and actors from all movies, split them and assign a numeric id
   // console.log('Calculating genres and actors');
   // const genres = [...new Set(games.flatMap((it) => it.genre.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
-  // const actors = [...new Set(games.flatMap((it) => it.actors.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
+  const tags = [...new Set(games.flatMap((it) => it.popular_tags.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
 
   console.log('Handling game insertion in Neo4j');
   const gamesBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
   gamesBar.start(games.length, 0);
   for (let game of games) {
-    // const movieGenres = game.genre.split(',').map(i => i.trim());
-    // const gamePublishers = game.publishers.split(',').map(i => i.trim());
+    const gameTags = game.popular_tags.split(',').map(i => i.trim());
 
-    //await graphDAO.upsertMovie(game._id, game.name);
+    await graphDAO.upsertGame(game._id, game.name);
 
-    // Update actor <-> movie links
-    // await Promise.all(movieActors.map((name) => {
-    //   const id = actors.find((it) => it[1] === name)[0] as number;
-    //   return graphDAO.upsertActor(game._id, { id, name });
-    // }));
-
-    // Update genre <-> movie links
-    // await Promise.all(movieGenres.map((name) => {
-    //   const id = genres.find((it) => it[1] === name)[0] as number;
-    //   return graphDAO.upsertGenre(game._id, { id, name });
-    // }));
-    // moviesBar.increment();
+    // Update tag <-> game links
+    await Promise.all(gameTags.map((name) => {
+      const id = tags.find((it) => it[1] === name)[0] as number;
+      return graphDAO.upsertTag(game._id, { id, name });
+    }));
+    gamesBar.increment();
   }
   gamesBar.stop();
 

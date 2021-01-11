@@ -45,9 +45,8 @@ bot.on('inline_query', async (ctx) => {
       input_message_content: {
         message_text: stripMargin`
           |Name -> ${game.name}
-          |Genre -> ${game.genre}
+          |Tags -> ${game.popular_tags}
           |Release date -> ${game.release_date}
-          |Publisher -> ${game.publisher}
           |Details -> ${game.desc_snippet}
         `
       },

@@ -2,11 +2,12 @@ import neo4j, { Driver, types, int } from 'neo4j-driver';
 
 import {
   User,
-  Actor,
   Genre,
   Added,
   Requested,
-  Comment, Rated,
+  Comment,
+  Rated,
+  Tag
 } from './Model';
 
 class GraphDAO {
@@ -74,37 +75,24 @@ class GraphDAO {
     });
   }
 
-  async upsertMovie(movieId: string, movieTitle: string) {
-    return await this.run('MERGE (m:Movie{id: $movieId}) ON CREATE SET m.title = $movieTitle RETURN m', {
-      movieId,
-      movieTitle,
+  async upsertGame(gameId: string, gameName: string) {
+    return await this.run('MERGE (g:Game{id: $gameId}) ON CREATE SET g.name = $gameName RETURN g', {
+      gameId,
+      gameName,
     })
   }
 
-  async upsertActor(movieId: string, actor: Actor) {
+  async upsertTag(gameId: string, tag: Tag) {
     return await this.run(`
-      MATCH (m:Movie{ id: $movieId })
-      MERGE (a:Actor{id: $actorId})
-        ON CREATE SET a.name = $actorName
-      MERGE (a)-[r:PLAYED_IN]->(m)
+      MATCH (g:Game{ id: $gameId })
+      MERGE (p:Tag{id: $tagId})
+        ON CREATE SET p.name = $tagName
+      MERGE (p)-[r:PUBLISHED]->(g)
     `, {
-      movieId,
-      actorId: actor.id,
-      actorName: actor.name,
+      gameId,
+      tagId: tag.id,
+      tagName: tag.name,
     })
-  }
-
-  async upsertGenre(movieId: string, genre: Genre) {
-    return await this.run(`
-      MATCH (m:Movie{ id: $movieId })
-      MERGE (g:Genre{id: $genreId})
-        ON CREATE SET g.name = $genreName
-      MERGE (m)-[r:BELONGS_TO]->(g)
-    `, {
-      movieId,
-      genreId: genre.id,
-      genreName: genre.name,
-    });
   }
 
   async upsertUser(user: User) {

@@ -2,13 +2,11 @@ import neo4j, { Driver, types, int } from 'neo4j-driver';
 
 import {
   User,
-  Liked,
   Actor,
   Genre,
   Added,
   Requested,
-  Comment,
-  likedValues
+  Comment, Rated,
 } from './Model';
 
 class GraphDAO {
@@ -28,7 +26,7 @@ class GraphDAO {
     await this.driver.close();
   }
 
-  async upsertMovieLiked(user: User, movieId: string, liked: Liked) {
+  async upsertMovieRated(user: User, movieId: string, rated: Rated) {
     await this.run(`
       MATCH (m:Movie {id: $movieId})
         MERGE (u:User {id: $userId})
@@ -55,12 +53,12 @@ class GraphDAO {
       languageCode: user.language_code,
       username: user.username,
       userId: this.toInt(user.id),
-      likedRank: liked.rank,
-      likedAt: this.toDate(liked.at),
+      likedRank: rated.rank,
+      likedAt: this.toDate(rated.at),
     });
   }
 
-  async getMovieLiked(userId: number, movieId: string): Promise<Liked | null> {
+  async getMovieRated(userId: number, movieId: string): Promise<Rated | null> {
     return await this.run('MATCH (:User{id: $userId})-[l:LIKED]-(:Movie{id: $movieId}) RETURN l', {
       userId,
       movieId,
@@ -146,7 +144,7 @@ class GraphDAO {
     });
   }
 
-  async upsertMovieUserLiked(userId: number, movieId: string, liked: Liked) {
+  async upsertMovieUserLiked(userId: number, movieId: string, rated: Rated) {
     return await this.run(`
       MATCH (m:Movie{ id: $movieId })
       MATCH (u:User{ id: $userId })
@@ -158,12 +156,12 @@ class GraphDAO {
     `, {
       userId: this.toInt(userId),
       movieId,
-      at: this.toDate(liked.at),
-      rank: this.toInt(liked.rank)
+      at: this.toDate(rated.at),
+      rank: this.toInt(rated.rank)
     });
   }
 
-  async upsertGenreLiked(userId: number, genreId: number, liked: Liked) {
+  async upsertGenreLiked(userId: number, genreId: number, rated: Rated) {
     return await this.run(`
       MATCH (g:Genre{ id: $genreId })
       MATCH (u:User{ id: $userId })
@@ -175,12 +173,12 @@ class GraphDAO {
     `, {
       userId: this.toInt(userId),
       genreId: this.toInt(genreId),
-      at: this.toDate(liked.at),
-      rank: liked.rank
+      at: this.toDate(rated.at),
+      rank: rated.rank
     });
   }
 
-  async upsertActorLiked(userId: number, actorId: number, liked: Liked) {
+  async upsertActorLiked(userId: number, actorId: number, rated: Rated) {
     return await this.run(`
       MATCH (a:Actor{ id: $actorId })
       MATCH (u:User{ id: $userId })
@@ -192,8 +190,8 @@ class GraphDAO {
     `, {
       userId: this.toInt(userId),
       actorId: this.toInt(actorId),
-      at: this.toDate(liked.at),
-      rank: this.toInt(liked.rank)
+      at: this.toDate(rated.at),
+      rank: this.toInt(rated.rank)
     });
   }
 

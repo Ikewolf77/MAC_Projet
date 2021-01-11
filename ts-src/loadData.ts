@@ -32,7 +32,7 @@ const shuffle = (array: any[]): any[] => {
 };
 
 const parseGames = async (): Promise<any[]> => new Promise((resolve) => {
-  fs.readFile(join(__dirname, '../data/steam_games.csv')).then((baseGames) => {
+  fs.readFile(join(__dirname, '../data/steam_games_1k.csv')).then((baseGames) => {
     parse(baseGames, (err, data) => {
       resolve(data);
     });

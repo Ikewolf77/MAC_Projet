@@ -29,15 +29,15 @@ class DocumentDAO {
     await this.collection.insertOne(game);
   }
 
-  async getGames(search: string): Promise<Movie[]> {
-    return await this.collection.find({ 'title': new RegExp(search) }).limit(10).toArray();
+  async getGames(search: string): Promise<Game[]> {
+    return await this.collection.find({ 'name': new RegExp(search) }).limit(10).toArray();
   }
 
-  async getMovieById(id: string) {
+  async getGameById(id: string) {
     return await this.collection.findOne({ _id: id });
   }
 
-  async getRandomMovies(n: number) {
+  async getRandomGames(n: number) {
     return await this.collection.find().limit(n).toArray();
   }
 

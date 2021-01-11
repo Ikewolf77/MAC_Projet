@@ -48,7 +48,7 @@ bot.on('inline_query', (ctx) => {
           `
         },
       }));
-      ctx.answerInlineQuery(answer);  
+      ctx.answerInlineQuery(answer);
     });
   }
 });
@@ -60,7 +60,7 @@ bot.on('chosen_inline_result', (ctx) => {
     graphDAO.getMovieLiked(ctx.from.id, ctx.chosenInlineResult.result_id).then((liked) => {
       if (liked !== null) {
         ctx.editMessageReplyMarkup(buildLikeKeyboard(ctx.chosenInlineResult.result_id, liked));
-      }  
+      }
     });
   }
 });
@@ -82,7 +82,7 @@ bot.on('callback_query', (ctx) => {
       ...ctx.from,
     }, movieId, liked).then(() => {
       ctx.editMessageReplyMarkup(buildLikeKeyboard(movieId, liked));
-    }); 
+    });
   }
 });
 

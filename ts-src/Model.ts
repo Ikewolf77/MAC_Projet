@@ -67,12 +67,12 @@ export type Requested = {
   at: Date;
 }
 
-export type Liked = {
+export type Rated = {
   at: Date;
   rank: number;
 }
 
-export const likedValues = [1,2,3,4,5];
+export const ratededValues = [1,2,3,4,5];
 
 export type User = {
   username?: string;

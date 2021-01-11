@@ -7,7 +7,7 @@ import { InlineKeyboardMarkup, InlineQueryResultArticle } from 'telegraf/typings
 
 import DocumentDAO from './DocumentDAO';
 import GraphDAO from './GraphDAO';
-import { Liked, likedValues } from './Model';
+import {Rated, ratededValues} from './Model';
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const graphDAO = new GraphDAO();
@@ -20,10 +20,10 @@ function stripMargin(template: TemplateStringsArray, ...expressions: any[]) {
   return result.replace(/(\n|\r|\r\n)\s*\|/g, '$1');
 }
 
-function buildLikeKeyboard(movieId: string, currentLike?: Liked): InlineKeyboardMarkup {
+function buildRateKeyboard(movieId: string, currentLike?: Rated): InlineKeyboardMarkup {
   return {
     inline_keyboard: [
-      likedValues.map((v) => ({
+      ratededValues.map((v) => ({
         text: currentLike && currentLike.rank === v ? "★".repeat(v) : "☆".repeat(v),
         callback_data: v + '__' + movieId, // payload that will be retrieved when button is pressed
       })),
@@ -35,20 +35,20 @@ function buildLikeKeyboard(movieId: string, currentLike?: Liked): InlineKeyboard
 bot.on('inline_query', async (ctx) => {
   const query = ctx.inlineQuery;
   if (query) {
-    const movies = await documentDAO.getGames(query.query);
-    const answer: InlineQueryResultArticle[] = movies.map((movie) => ({
-      id: movie._id,
+    const games = await documentDAO.getGames(query.query);
+    const answer: InlineQueryResultArticle[] = games.map((game) => ({
+      id: game._id,
       type: 'article',
-      title: movie.title,
-      description: movie.description,
-      reply_markup: buildLikeKeyboard(movie._id),
+      title: game.name,
+      description: game.desc_snippet,
+      reply_markup: buildRateKeyboard(game._id),
       input_message_content: {
         message_text: stripMargin`
-          |Title: ${movie.title}
-          |Description: ${movie.description},
-          |Year: ${movie.year}
-          |Actors: ${movie.actors}
-          |Genres: ${movie.genre}
+          |Name -> ${game.name}
+          |Genre -> ${game.genre}
+          |Release date -> ${game.release_date}
+          |Publisher -> ${game.publisher}
+          |Details -> ${game.desc_snippet}
         `
       },
     }));
@@ -57,33 +57,34 @@ bot.on('inline_query', async (ctx) => {
 });
 
 // User chose a movie from the list displayed in the inline query
-// Used to update the keyboard and show filled stars if user already liked it
+// Used to update the keyboard and show filled stars if user already rated it
 bot.on('chosen_inline_result', async (ctx) => {
   if (ctx.from && ctx.chosenInlineResult) {
-    const liked = await graphDAO.getMovieLiked(ctx.from.id, ctx.chosenInlineResult.result_id);
-    if (liked !== null) {
-      ctx.editMessageReplyMarkup(buildLikeKeyboard(ctx.chosenInlineResult.result_id, liked));
+    const rated = await graphDAO.getMovieRated(ctx.from.id, ctx.chosenInlineResult.result_id);
+    if (rated !== null) {
+      ctx.editMessageReplyMarkup(buildRateKeyboard(ctx.chosenInlineResult.result_id, rated));
     }
   }
 });
 
+// Callback called when we click on the "reply_markup" (rated starts reply) from the game
 bot.on('callback_query', async (ctx) => {
   if (ctx.callbackQuery && ctx.from) {
     const [rank, movieId] = ctx.callbackQuery.data.split('__');
     console.log(rank, movieId);
-    const liked: Liked = {
+    const rated: Rated = {
       rank: parseInt(rank, 10),
       at: new Date()
     };
-    await graphDAO.upsertMovieLiked({
+    await graphDAO.upsertMovieRated({
       first_name: 'unknown',
       last_name: 'unknown',
       language_code: 'fr',
       is_bot: false,
       username: 'unknown',
       ...ctx.from,
-    }, movieId, liked);
-    ctx.editMessageReplyMarkup(buildLikeKeyboard(movieId, liked));
+    }, movieId, rated);
+    ctx.editMessageReplyMarkup(buildRateKeyboard(movieId, rated));
   }
 });
 
@@ -127,6 +128,7 @@ bot.command('all', (ctx) => {
     ctx.reply('We cannot guess who you are');
   } else {
     (async () => {
+      /*
       const games = await documentDAO.getAllGames();
       let text = '';
       text += `There is : ${games.length} games.\n\t`;
@@ -138,7 +140,21 @@ bot.command('all', (ctx) => {
         }
       }
       console.log(games);
+      await ctx.reply(text);*/
+
+      const games = await documentDAO.getRandomGames(3);
+      let text = '';
+      text += `There is : ${games.length} games.\n\t`;
+      let i = 1;
+      for (const game of games) {
+        text += `${i}. ${game.name}\n\t`
+        if(++i == 3) {
+          break;
+        }
+      }
+      console.log(games);
       await ctx.reply(text);
+
     })();
   }
 });

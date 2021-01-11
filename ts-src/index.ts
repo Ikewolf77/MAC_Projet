@@ -71,7 +71,7 @@ bot.on('callback_query', async (ctx) => {
   if (ctx.callbackQuery && ctx.from) {
     const [rank, gameId] = ctx.callbackQuery.data.split('__');
     console.log(rank, gameId);
-    
+
     const rated: Rated = {
       rank: parseInt(rank, 10),
       at: new Date()
@@ -103,22 +103,22 @@ Use the command /recommendactor to get a personalized recommendation.
 });
 
 bot.command('start', (ctx) => {
-  ctx.reply('HEIG-VD Mac project example bot in javascript');
+  ctx.reply('HEIG-VD Mac project about games rating, written in TypeScript.');
 });
 
-bot.command('recommendactor', (ctx) => {
+bot.command('recommendGames', (ctx) => {
   if (!ctx.from || !ctx.from.id) {
     ctx.reply('We cannot guess who you are');
   } else {
-    graphDAO.recommendActors(ctx.from.id).then((records) => {
-      if (records.length === 0) ctx.reply("You haven't liked enough movies to have recommendations");
+    graphDAO.recommendGames(ctx.from.id).then((records) => {
+      if (records.length === 0) ctx.reply("You haven't liked enough games to have recommendations");
       else {
-        const actorsList = records.map((record) => {
-          const name = record.get('a').properties.name;
+        const gamesList = records.map((record) => {
+          const name = record.get('g2').properties.name;
           const count = record.get('count(*)').toInt();
           return `${name} (${count})`;
         }).join("\n\t");
-        ctx.reply(`Based your like and dislike we recommend the following actor(s):\n\t${actorsList}`);
+        ctx.reply(`Based on your ratings, we recommend the following games:\n\t${gamesList}`);
       }
     });
   }

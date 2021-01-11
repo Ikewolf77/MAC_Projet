@@ -237,7 +237,7 @@ class GraphDAO {
     });
   }
 
-  async recommendActors(userId: number) {
+  async recommendGames(userId: number) {
     /*
     return await this.run(`
       match (u:User{id: $userId})-[l:LIKED]->(m:Movie)<-[:PLAYED_IN]-(a:Actor)-[:PLAYED_IN]->(m2:Movie)<-[l2:LIKED]-(u)
@@ -250,9 +250,9 @@ class GraphDAO {
     }).then((result) => result.records);
     */
    return await this.run(`
-      match (u:User{id: $userId})-[l:LIKED]->(m:Movie)<-[:PLAYED_IN]-(a:Actor)
-      return a, count(*)
-      order by count(*) desc
+      match (u:User{id: $userId})-[r:RATED]->(g:Game)<-[:TAGGED]-(t:Tag)-[:TAGGED]->(g2:Game)
+      return g2, r, count(*)
+      order by r.rank desc
       limit 5
     `, {
       userId

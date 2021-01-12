@@ -124,6 +124,18 @@ bot.command('recommendGames', (ctx) => {
   }
 });
 
+bot.command('likeTag', (ctx) => {
+  let tagName = ctx.update.message.text.substr(ctx.update.message.text.indexOf(' ') + 1);
+  // No args (tagname) detected
+  if(tagName === ctx.update.message.text) {
+    ctx.reply('No tag detected, use /likeTag <tagName>');
+  }
+  // Add the relation
+  else{
+    ctx.reply(`Your tag is : ${tagName}`);
+  }
+});
+
 bot.command('all', (ctx) => {
   if (!ctx.from || !ctx.from.id) {
     ctx.reply('We cannot guess who you are');

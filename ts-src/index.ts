@@ -113,7 +113,7 @@ bot.command('recommendGames', (ctx) => {
     graphDAO.recommendGamesFromLikedTags(ctx.from.id).then((records) => {
       if (records.length === 0) {
         graphDAO.recommendGames(ctx.from.id).then((records2) => {
-          if (records.length === 0) {
+          if (records2.length === 0) {
             ctx.reply("You haven't rated enough games to have recommendations");
           } else {
             const gamesList = records2.map((record) => {

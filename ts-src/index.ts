@@ -133,7 +133,7 @@ bot.command('likeTag', (ctx) => {
     }
     // Add the relation it tag exists
     else{
-      const tag = await graphDAO.getTagByName(tagName);
+      const tag = await graphDAO.getTagByName(tagName.toLowerCase());
 
       // Tag exists => upsert the liked relation between the user and tag
       if (tag !== null) {

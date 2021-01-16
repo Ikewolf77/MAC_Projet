@@ -91,13 +91,13 @@ const documentDAO = new DocumentDAO();
   // Retrieve all genres and actors from all movies, split them and assign a numeric id
   // console.log('Calculating genres and actors');
   // const genres = [...new Set(games.flatMap((it) => it.genre.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
-  const tags = [...new Set(games.flatMap((it) => it.popular_tags.split(',').map(it => it.trim())))].map((it, i) => [i, it]);
+  const tags = [...new Set(games.flatMap((it) => it.popular_tags.split(',').map(it => it.trim().toLowerCase())))].map((it, i) => [i, it]);
 
   console.log('Handling game insertion in Neo4j');
   const gamesBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
   gamesBar.start(games.length, 0);
   for (let game of games) {
-    const gameTags = game.popular_tags.split(',').map(i => i.trim());
+    const gameTags = game.popular_tags.split(',').map(i => i.trim().toLowerCase());
 
     await graphDAO.upsertGame(game._id, game.name);
 

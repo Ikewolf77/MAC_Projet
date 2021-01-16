@@ -110,15 +110,28 @@ bot.command('recommendGames', (ctx) => {
   if (!ctx.from || !ctx.from.id) {
     ctx.reply('We cannot guess who you are');
   } else {
-    graphDAO.recommendGames(ctx.from.id).then((records) => {
-      if (records.length === 0) ctx.reply("You haven't liked enough games to have recommendations");
+    graphDAO.recommendGamesFromLikedTags(ctx.from.id).then((records) => {
+      if (records.length === 0) {
+        graphDAO.recommendGames(ctx.from.id).then((records2) => {
+          if (records.length === 0) {
+            ctx.reply("You haven't rated enough games to have recommendations");
+          } else {
+            const gamesList = records2.map((record) => {
+              const name = record.get('g2').properties.name;
+              const count = record.get('count(*)').toInt();
+              return `${name} (${count})`;
+            }).join("\n\t");
+            ctx.reply(`Based on your ratings, we recommend the following games:\n\t${gamesList}`);
+          }
+        });
+      }
       else {
         const gamesList = records.map((record) => {
           const name = record.get('g2').properties.name;
           const count = record.get('count(*)').toInt();
           return `${name} (${count})`;
         }).join("\n\t");
-        ctx.reply(`Based on your ratings, we recommend the following games:\n\t${gamesList}`);
+        ctx.reply(`Based on your ratings and liked tags, we recommend the following games:\n\t${gamesList}`);
       }
     });
   }

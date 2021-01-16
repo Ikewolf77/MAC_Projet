@@ -2,7 +2,6 @@ import neo4j, { Driver, types, int } from 'neo4j-driver';
 
 import {
   User,
-  Genre,
   Added,
   Requested,
   Comment,
@@ -281,22 +280,23 @@ class GraphDAO {
   }
 
   async recommendGames(userId: number) {
-    /*
-    return await this.run(`
-      match (u:User{id: $userId})-[l:LIKED]->(m:Movie)<-[:PLAYED_IN]-(a:Actor)-[:PLAYED_IN]->(m2:Movie)<-[l2:LIKED]-(u)
-      where id(m) < id(m2) and l.rank > 3 and l2.rank > 3
-      return a, count(*)
-      order by count(*) desc
-      limit 5
-    `, {
-      userId
-    }).then((result) => result.records);
-    */
    return await this.run(`
       match (u:User{id: $userId})-[r:RATED]->(g:Game)<-[:TAGGED]-(t:Tag)-[:TAGGED]->(g2:Game)
       return g2, r, count(*)
       order by r.rank desc
-      limit 5
+      limit 10
+    `, {
+      userId
+    }).then((result) => result.records);
+  }
+
+  async recommendGamesFromLikedTags(userId: number) {
+    return await this.run(`
+    match (u:User{id: $userId})-[r:RATED]->(g:Game)<-[:TAGGED]-(t1:Tag)-[:TAGGED]->(g2:Game)
+      match (u)-[l:LIKED]->(t1)-[:TAGGED]->(g2)
+      return g2, r, count(*)
+      order by r.rank desc
+      limit 10
     `, {
       userId
     }).then((result) => result.records);

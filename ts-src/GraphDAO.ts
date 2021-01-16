@@ -59,7 +59,50 @@ class GraphDAO {
     });
   }
 
-  async getMovieRated(userId: number, gameId: string): Promise<Rated | null> {
+  async upsertTagLiked(user: User, tagId: number) {
+    await this.run(`
+      MATCH (t:Tag { id: $tagId })
+        MERGE (u:User {id: $userId})
+          ON CREATE SET u.isBot = $isBot,
+                        u.firstName = $firstName,
+                        u.lastName = $lastName,
+                        u.username = $username,
+                        u.languageCode = $languageCode
+          ON MATCH SET  u.isBot = $isBot,
+                        u.firstName = $firstName,
+                        u.lastName = $lastName,
+                        u.username = $username,
+                        u.languageCode = $languageCode
+        MERGE (u)-[:LIKED]->(t)
+    `, {
+      tagId,
+      isBot: user.is_bot,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      languageCode: user.language_code,
+      username: user.username,
+      userId: this.toInt(user.id),
+    });
+  }
+
+  async getTagByName(tagName: string): Promise<Tag | null> {
+    return await this.run(`
+      MATCH (t:Tag{name: $tagName}) RETURN t
+    `, {
+      tagName
+    }).then((res) => {
+      if (res.records.length === 0) return null;
+      else {
+        const record = res.records[0].get('t');
+        return {
+          id: record.properties.id,
+          name: record.properties.name,
+        }
+      }
+    });
+  }
+
+  async getGameRated(userId: number, gameId: string): Promise<Rated | null> {
     return await this.run('MATCH (:User{id: $userId})-[r:RATED]-(:Game{id: $gameId}) RETURN r', {
       userId,
       gameId,

@@ -59,7 +59,7 @@ bot.on('inline_query', async (ctx) => {
 // Used to update the keyboard and show filled stars if user already rated it
 bot.on('chosen_inline_result', async (ctx) => {
   if (ctx.from && ctx.chosenInlineResult) {
-    const rated = await graphDAO.getMovieRated(ctx.from.id, ctx.chosenInlineResult.result_id);
+    const rated = await graphDAO.getGameRated(ctx.from.id, ctx.chosenInlineResult.result_id);
     if (rated !== null) {
       ctx.editMessageReplyMarkup(buildRateKeyboard(ctx.chosenInlineResult.result_id, rated));
     }
@@ -125,15 +125,36 @@ bot.command('recommendGames', (ctx) => {
 });
 
 bot.command('likeTag', (ctx) => {
-  let tagName = ctx.update.message.text.substr(ctx.update.message.text.indexOf(' ') + 1);
-  // No args (tagname) detected
-  if(tagName === ctx.update.message.text) {
-    ctx.reply('No tag detected, use /likeTag <tagName>');
-  }
-  // Add the relation
-  else{
-    ctx.reply(`Your tag is : ${tagName}`);
-  }
+  (async () => {
+    let tagName = ctx.update.message.text.substr(ctx.update.message.text.indexOf(' ') + 1);
+    // No args (tagname) detected
+    if(tagName === ctx.update.message.text) {
+      ctx.reply('No tag detected, use /likeTag <tagName>');
+    }
+    // Add the relation it tag exists
+    else{
+      const tag = await graphDAO.getTagByName(tagName);
+
+      // Tag exists => upsert the liked relation between the user and tag
+      if (tag !== null) {
+        await graphDAO.upsertTagLiked({
+          first_name: 'unknown',
+          last_name: 'unknown',
+          language_code: 'fr',
+          is_bot: false,
+          username: 'unknown',
+          ...ctx.from,
+        }, tag.id);
+
+        ctx.reply(`You liked the tag "${tagName}"`);
+
+      }
+      // Tag doesn't exists => wrong tag name entered by user
+      else{
+        ctx.reply(`The tag "${tagName}" doesn't exists`);
+      }
+    }
+  })();
 });
 
 bot.command('all', (ctx) => {

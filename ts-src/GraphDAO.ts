@@ -134,29 +134,6 @@ class GraphDAO {
     })
   }
 
-  async upsertUser(user: User) {
-    return await this.run(`
-      MERGE (u:User {id: $userId})
-      ON CREATE SET u.isBot = $isBot,
-                    u.firstName = $firstName,
-                    u.lastName = $lastName,
-                    u.username = $username,
-                    u.languageCode = $languageCode
-      ON MATCH SET  u.isBot = $isBot,
-                    u.firstName = $firstName,
-                    u.lastName = $lastName,
-                    u.username = $username,
-                    u.languageCode = $languageCode
-    `, {
-      userId: this.toInt(user.id),
-      firstName: user.first_name,
-      lastName: user.last_name,
-      username: user.username,
-      languageCode: user.language_code,
-      isBot: user.is_bot,
-    });
-  }
-
   async recommendGames(userId: number) {
    return await this.run(`
       match (u:User{id: $userId})-[r:RATED]->(g:Game)<-[:TAGGED]-(t:Tag)-[:TAGGED]->(g2:Game)

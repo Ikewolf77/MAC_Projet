@@ -10,7 +10,7 @@ import GraphDAO from "./GraphDAO";
 dotenv.config();
 
 const parseGames = async (): Promise<any[]> => new Promise((resolve) => {
-  fs.readFile(join(__dirname, '../data/steam_games_99.csv')).then((baseGames) => {
+  fs.readFile(join(__dirname, '../data/steam_games_999.csv')).then((baseGames) => {
     parse(baseGames, (err, data) => {
       resolve(data);
     });

@@ -138,7 +138,7 @@ class GraphDAO {
    return await this.run(`
       match (u:User{id: $userId})-[r:RATED]->(g:Game)<-[:TAGGED]-(t:Tag)-[:TAGGED]->(g2:Game)
       return g2, r, count(*)
-      order by r.rank desc
+      order by r.rank desc, count(*) desc
       limit 10
     `, {
       userId
@@ -150,7 +150,7 @@ class GraphDAO {
     match (u:User{id: $userId})-[r:RATED]->(g:Game)<-[:TAGGED]-(t1:Tag)-[:TAGGED]->(g2:Game)
       match (u)-[l:LIKED]->(t1)-[:TAGGED]->(g2)
       return g2, r, count(*)
-      order by r.rank desc
+      order by r.rank desc, count(*) desc
       limit 10
     `, {
       userId

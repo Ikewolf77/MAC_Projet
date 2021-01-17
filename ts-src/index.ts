@@ -95,8 +95,8 @@ bot.command('help', (ctx) => {
 This is a game rating bot (project in the MAC course at the HEIG-VD)
 
 Call the bot using '@' and you'll be able to search for games to rate.
-You can like a specific tag using /likeTag in order to get recommendation from them.
-Use /recommendGames to display a list a games you could be interested in, according to your game ratings and liked tags.
+You can like a specific tag using /liketag in order to get recommendation from them.
+Use /recommendgames to display a list a games you could be interested in, according to your game ratings and liked tags.
   `);
 });
 

@@ -1,7 +1,6 @@
-url,types,name,desc_snippet,recent_reviews,all_reviews,release_date,developer,publisher,popular_tags,game_details,languages,achievements,genre,game_description,mature_content,minimum_requirements,recommended_requirements,original_price,discount_price
-…,app,Game1,This is the game 1,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag1, Tag2",Single-player,English,,,,,,,$10.00,
-…,app,Game2,This is the game 2,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag3, Tag4",Single-player,English,,,,,,,$10.00,
-…,app,Game3,This is the game 3,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd",Tag1,Single-player,English,,,,,,,$10.00,
-…,app,Game4,This is the game 4,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd",Tag3,Single-player,English,,,,,,,$10.00,
-…,app,Game5,This is the game 5,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag2, Tag4",Single-player,English,,,,,,,$10.00,
-…,app,Game6,This is the game 6,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag1, Tag3",Single-player,English,,,,,,,$10.00,
+…,app,Game1,This is the game 1,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag1, Tag2",Single-player,English,$10.00
+…,app,Game2,This is the game 2,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag3, Tag4",Single-player,English,$10.00
+…,app,Game3,This is the game 3,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd",Tag1,Single-player,English,$10.00
+…,app,Game4,This is the game 4,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd",Tag3,Single-player,English,$10.00
+…,app,Game5,This is the game 5,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag2, Tag4",Single-player,English,$10.00
+…,app,Game6,This is the game 6,Very positive,Very positive,"Jan 17, 2021","Gollgot studio, Ltd","Gollgot studio, Ltd","Tag1, Tag3",Single-player,English,$10.00

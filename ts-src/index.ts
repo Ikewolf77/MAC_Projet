@@ -104,7 +104,7 @@ bot.command('start', (ctx) => {
   ctx.reply('HEIG-VD Mac project about games rating, written in TypeScript.');
 });
 
-bot.command('recommendGames', (ctx) => {
+bot.command('recommendgames', (ctx) => {
   if (!ctx.from || !ctx.from.id) {
     ctx.reply('We cannot guess who you are');
   } else {
@@ -135,7 +135,7 @@ bot.command('recommendGames', (ctx) => {
   }
 });
 
-bot.command('likeTag', (ctx) => {
+bot.command('liketag', (ctx) => {
   (async () => {
     let tagName = ctx.update.message.text.substr(ctx.update.message.text.indexOf(' ') + 1);
     // No args (tagname) detected

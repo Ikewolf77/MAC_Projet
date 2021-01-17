@@ -25,7 +25,7 @@ You first have to register it on Telegram. To do this, follow the official [docu
   ```
   help - Show the help
   liketag - Like a specific tag
-  recommandgames - Get a list of games you could be interested in
+  recommendgames - Get a list of games you could be interested in
   ```
 
 - Run `/setinline` and `/setinlinefeedback` for the bot to be able to answer inline queries

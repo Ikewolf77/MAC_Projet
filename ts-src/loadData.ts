@@ -110,64 +110,6 @@ const documentDAO = new DocumentDAO();
   }
   gamesBar.stop();
 
-  // Add some films added by users
-  // console.log('Add some films liked by users');
-  // const addedPromise = [400, 87, 0, 34, 58].flatMap((quantity, index) => {
-  //   return shuffle(movies).slice(0, quantity).map((movie: Movie) => {
-  //     return graphDAO.upsertAdded(users[index].id, movie._id, {
-  //       at: new Date(160613000 * 1000 + (Math.floor(Math.random() * 3124) * 1000))
-  //     });
-  //   });
-  // });
-  // await Promise.all(addedPromise);
-
-  // Add some movies liked by users
-  // console.log('Add some movies liked by users');
-  // const likePromise = [280, 34, 98, 254, 0].flatMap((quantity, index) => {
-  //   return shuffle(movies).slice(0, quantity).map((movie: Movie) => {
-  //     return graphDAO.upsertMovieLiked(users[index], movie._id, {
-  //       rank: Math.floor(Math.random() * 5) + 1 as 1 | 2 | 3 | 4 | 5,
-  //       at: new Date(160613000 * 1000 + (Math.floor(Math.random() * 3124) * 1000))
-  //     });
-  //   });
-  // });
-  // await Promise.all(likePromise);
-
-  // Add some actors liked by users
-  // console.log('Add some actors liked by users');
-  // const actorsPromise = [300, 674, 0, 45, 36].flatMap((quantity, index) => {
-  //   return shuffle(actors).slice(0, quantity).map(([actorId, actor]) => {
-  //     return graphDAO.upsertActorLiked(users[index].id, actorId, {
-  //       rank: Math.floor(Math.random() * 5) + 1 as 1 | 2 | 3 | 4 | 5,
-  //       at: new Date(160613000 * 1000 + (Math.floor(Math.random() * 3124) * 1000))
-  //     });
-  //   });
-  // });
-  // await Promise.all(actorsPromise);
-
-  // Add some genres liked by users
-  // console.log('Add some genres liked by users');
-  // const genrePromise = [22, 3, 0, 4, 7].flatMap((quantity, index) => {
-  //   return shuffle(genres).slice(0, quantity).map(([genreId, actor]) => {
-  //     return graphDAO.upsertGenreLiked(users[index].id, genreId, {
-  //       rank: Math.floor(Math.random() * 5) + 1 as 1 | 2 | 3 | 4 | 5,
-  //       at: new Date(160613000 * 1000 + (Math.floor(Math.random() * 3124) * 1000))
-  //     });
-  //   });
-  // });
-  // await Promise.all(genrePromise);
-
-  // Add some movies requested
-  // console.log('Add some requested movies');
-  // const requestedPromise = [560, 12, 456, 25, 387].flatMap((quantity, index) => {
-  //   return shuffle(movies).slice(0, quantity).map((movie: Movie) => {
-  //     return graphDAO.upsertRequested(users[index].id, movie._id, {
-  //       at: new Date(160613000 * 1000 + (Math.floor(Math.random() * 3124) * 1000))
-  //     });
-  //   });
-  // });
-  // await Promise.all(requestedPromise);
-
   console.log('Done, closing sockets');
   await Promise.all([
     documentDAO.close(),

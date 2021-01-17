@@ -7,7 +7,7 @@ import { InlineKeyboardMarkup, InlineQueryResultArticle } from 'telegraf/typings
 
 import DocumentDAO from './DocumentDAO';
 import GraphDAO from './GraphDAO';
-import {Rated, ratededValues} from './Model';
+import {Rated, ratedValues} from './Model';
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const graphDAO = new GraphDAO();
@@ -23,7 +23,7 @@ function stripMargin(template: TemplateStringsArray, ...expressions: any[]) {
 function buildRateKeyboard(movieId: string, currentLike?: Rated): InlineKeyboardMarkup {
   return {
     inline_keyboard: [
-      ratededValues.map((v) => ({
+      ratedValues.map((v) => ({
         text: currentLike && currentLike.rank === v ? "★".repeat(v) : "☆".repeat(v),
         callback_data: v + '__' + movieId, // payload that will be retrieved when button is pressed
       })),
@@ -92,13 +92,11 @@ bot.on('callback_query', async (ctx) => {
 
 bot.command('help', (ctx) => {
   ctx.reply(`
-A demo for the project given in the MAC course at the HEIG-VD.
+This is a game rating bot (project in the MAC course at the HEIG-VD)
 
-A user can display a movie and set a reaction to this movie (like, dislike).
-When asked, the bot will provide a recommendation based on the movies he liked or disliked.
-
-Use inline queries to display a movie, then use the inline keyboard of the resulting message to react.
-Use the command /recommendactor to get a personalized recommendation.
+Call the bot using '@' and you'll be able to search for games to rate.
+You can like a specific tag using /likeTag in order to get recommendation from them.
+Use /recommendGames to display a list a games you could be interested in, according to your game ratings and liked tags.
   `);
 });
 
@@ -169,43 +167,6 @@ bot.command('likeTag', (ctx) => {
     }
   })();
 });
-
-bot.command('all', (ctx) => {
-  if (!ctx.from || !ctx.from.id) {
-    ctx.reply('We cannot guess who you are');
-  } else {
-    (async () => {
-      /*
-      const games = await documentDAO.getAllGames();
-      let text = '';
-      text += `There is : ${games.length} games.\n\t`;
-      let i = 1;
-      for (const game of games) {
-        text += `${i}. ${game.name}\n\t`
-        if(++i == 10) {
-          break;
-        }
-      }
-      console.log(games);
-      await ctx.reply(text);*/
-
-      const games = await documentDAO.getRandomGames(3);
-      let text = '';
-      text += `There is : ${games.length} games.\n\t`;
-      let i = 1;
-      for (const game of games) {
-        text += `${i}. ${game.name}\n\t`
-        if(++i == 3) {
-          break;
-        }
-      }
-      console.log(games);
-      await ctx.reply(text);
-
-    })();
-  }
-});
-
 
 // Initialize mongo connexion
 // before starting bot

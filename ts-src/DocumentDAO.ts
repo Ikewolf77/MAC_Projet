@@ -33,14 +33,6 @@ class DocumentDAO {
     return await this.collection.find({ 'name': new RegExp(search) }).limit(10).toArray();
   }
 
-  async getGameById(id: string) {
-    return await this.collection.findOne({ _id: id });
-  }
-
-  async getRandomGames(n: number) {
-    return await this.collection.find().limit(n).toArray();
-  }
-
   async getAllGames(): Promise<Game[]> {
     return (await this.collection.find().toArray()).map((it) => ({
       ...it,

@@ -116,8 +116,7 @@ bot.command('recommendgames', (ctx) => {
           } else {
             const gamesList = records2.map((record) => {
               const name = record.get('g2').properties.name;
-              const count = record.get('count(*)').toInt();
-              return `${name} (${count})`;
+              return `${name}`;
             }).join("\n\t");
             ctx.reply(`Based on your ratings, we recommend the following games:\n\t${gamesList}`);
           }

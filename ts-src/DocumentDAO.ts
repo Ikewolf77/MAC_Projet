@@ -30,7 +30,7 @@ class DocumentDAO {
   }
 
   async getGames(search: string): Promise<Game[]> {
-    return await this.collection.find({ 'name': new RegExp(search) }).limit(10).toArray();
+    return await this.collection.find({ 'name': new RegExp('.*'+search+'.*') }).limit(10).toArray();
   }
 
   async getAllGames(): Promise<Game[]> {

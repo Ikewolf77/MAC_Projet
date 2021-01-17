@@ -1,5 +1,5 @@
 import { Collection, Db, MongoClient } from "mongodb";
-import {Game, Movie} from "./Model";
+import {Game} from "./Model";
 
 class DocumentDAO {
 
